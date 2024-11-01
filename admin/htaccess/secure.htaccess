@@ -1,0 +1,168 @@
+#   SECURITYPLUGIN 1.2.0 >>>>>>> SECURE .HTACCESS     
+
+# If you edit the line of code above you will see error messages on the WPSP status page
+# WPSP is reading the version number in the htaccess file to validate checks
+# If you would like to change what is displayed above you
+# will need to edit the WPSP functions.php file to match your changes
+# For more info see the WPSP Guide at AIT-pro.com
+
+# If you are getting 500 Errors when activating WPSP then comment out Options -Indexes
+Options -Indexes
+
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+# If you want to add a custom 403 Forbidden page for your website uncomment the 
+# ErrorDocument line of code below and copy the ait-pro.com example forbidden 
+# HTML page to your correct website folder. See the WPSP Help and FAQ page for 
+# detailed instructions on how to do this. If your Theme 404 template is named
+# 404.php then you can uncomment the 404 line below now. If your 404 template is
+# named some other file name then change 404.php to the name of your 404 template
+# name and uncomment the 404 line of code below.
+# ErrorDocument 403 /forbidden.html
+# ErrorDocument 404 /404.php
+
+# Plugin conflicts will be handled case by case
+# You can leave the plugin fixes code intact just in case you install one of these plugins
+# at a later time. Thousands of lines of htaccess code can be read in milliseconds
+# so leaving the code intact does not slow down your website performance at all.
+# Thousands of plugins have been tested with WPSP and the plugin conflict fixes 
+# contained in this WPSP master file are permanent fixes for conflicts found with
+# these plugins. If you use AutoMagic to create this file then your correct WordPress installation
+# folder name will be automatically added to the plugin fixes that need a WP folder name.
+# If you choose to manually edit this file instead of using AutoMagic be sure to add your 
+# WordPress installation folder name to the fixes that require your WordPress folder name.
+# Your WordPress installation folder name can be found on the System Info page. If you only see
+# a forward slash then you have a root folder installation and do not need to add a folder name.
+
+# redirect_to= string fix - fixes issues with plugins that use the redirect_to= string
+RewriteCond %{QUERY_STRING} redirect_to=(.*) [NC]
+RewriteRule . - [S=30]
+
+# Login Plugins Password Reset And Redirect Conflicts Fix 1
+RewriteCond %{QUERY_STRING} action=resetpass&key=(.*) [NC]
+RewriteRule . - [S=30]
+
+# Login Plugins Password Reset And Redirect Conflicts Fix 2
+RewriteCond %{QUERY_STRING} action=rp&key=(.*) [NC]
+RewriteRule . - [S=30]
+
+# BuddyPress Logout Redirect fix - skip WPSP Filters on Logout link Redirect
+# WordPress 3.0.4 or higher must be installed for this fix to work
+RewriteCond %{QUERY_STRING} action=logout&redirect_to=http%3A%2F%2F(.*) [NC]
+RewriteRule . - [S=30]
+
+# Ozh' Admin Drop Down Menu Display Fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/ozh-admin-drop-down-menu/ [NC] 
+RewriteRule . - [S=30]
+
+# ComicPress Manager ComicPress Theme Image Fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/comicpress-manager/ [NC] 
+RewriteRule . - [S=30]
+
+# TimThumb and all other Thumbnailer Images not displaying - Red X instead of Images
+# If your theme uses an image thumbnailer script file this fix will work to display images correctly
+# as long as thumb is part of the file name like timthumb.php, thumb.php, thumbs.php or phpthumb.php
+RewriteCond %{REQUEST_FILENAME} ^(.*)thumb(.*)$ [NC]
+RewriteRule ^(.*)$ - [S=30]
+
+# YAPB Image Display fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/yet-another-photoblog/ [NC] 
+RewriteRule . - [S=30]
+
+# WordPress.com Stats Flash SWF Graph Does Not Load Fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/stats/ [NC]
+RewriteRule . - [S=30]
+
+# Status Updater plugin fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/fb-status-updater/ [NC] 
+RewriteRule . - [S=30]
+
+# wp-extplorer login fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/wp-extplorer/ [NC] 
+RewriteRule . - [S=30]
+
+# Adminer MySQL management tool fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/adminer/ [NC] 
+RewriteRule . - [S=30]
+
+# Peters Custom Anti-Spam Image fix
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/peters-custom-anti-spam-image/ [NC] 
+RewriteRule . - [S=30]
+
+# Stream Video Player - Adding FLV Videos is Blocked By WPSP
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/stream-video-player/ [NC]
+RewriteRule . - [S=30]
+
+# FeedWordPress - ?update_feedwordpress= String Blocked
+RewriteCond %{QUERY_STRING} update_feedwordpress=(.*) [NC]
+RewriteRule . - [S=30]
+
+# XCloner 404 or 403 error when updating settings
+RewriteCond %{REQUEST_URI} ^/wp-content/plugins/xcloner-backup-and-restore/ [NC]
+RewriteRule . - [S=30]
+
+# podPress rewrite ?feed=podcast as /feed/podcast
+# If you are using a custom slug then add the slug name to the rewriterule
+# RewriteRule (.*) /feed/custom-slug-name/$1? [R=301,L]
+RewriteCond %{QUERY_STRING} feed=podcast [NC]
+RewriteRule (.*) /feed/podcast/$1? [R=301,L]
+
+# podPress rewrite ?feed=enhancedpodcast as /feed/enhancedpodcast
+# If you are using a custom slug then add the slug name to the rewriterule
+# RewriteRule (.*) /feed/custom-slug-name/$1? [R=301,L]
+RewriteCond %{QUERY_STRING} feed=enhancedpodcast [NC]
+RewriteRule (.*) /feed/enhancedpodcast/$1? [R=301,L]
+
+# podPress rewrite ?feed=torrent as /feed/torrent
+# If you are using a custom slug then add the slug name to the rewriterule
+# RewriteRule (.*) /feed/custom-slug-name/$1? [R=301,L]
+RewriteCond %{QUERY_STRING} feed=torrent [NC]
+RewriteRule (.*) /feed/torrent/$1? [R=301,L]
+
+# podPress rewrite ?feed=premium as /feed/premium
+# If you are using a custom slug then add the slug name to the rewriterule
+# RewriteRule (.*) /feed/custom-slug-name/$1? [R=301,L]
+RewriteCond %{QUERY_STRING} feed=premimum [NC]
+RewriteRule (.*) /feed/premium/$1? [R=301,L]
+
+# FILTER REQUEST METHODS
+RewriteCond %{REQUEST_METHOD} ^(HEAD|TRACE|DELETE|TRACK) [NC]
+RewriteRule ^(.*)$ - [F,L]
+
+# QUERY STRING EXPLOITS 
+RewriteCond %{QUERY_STRING} \.\.\/ [NC,OR] 
+RewriteCond %{QUERY_STRING} boot\.ini [NC,OR] 
+RewriteCond %{QUERY_STRING} tag\= [NC,OR] 
+RewriteCond %{QUERY_STRING} ftp\:  [NC,OR] 
+RewriteCond %{QUERY_STRING} http\:  [NC,OR] 
+RewriteCond %{QUERY_STRING} https\:  [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*iframe.*(\>|%3E) [NC,OR] 
+RewriteCond %{QUERY_STRING} mosConfig_[a-zA-Z_]{1,21}(=|%3D) [NC,OR]
+RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} ^(.*)cPath=http://(.*)$ [NC,OR] 
+RewriteCond %{QUERY_STRING} ^(.*)/self/(.*)$ [NC,OR]
+RewriteCond %{QUERY_STRING} ^.*(\[|\]|\(|\)|<|>).* [NC,OR] 
+RewriteCond %{QUERY_STRING} ^.*(globals|encode|localhost|loopback).* [NC,OR] 
+RewriteCond %{QUERY_STRING} ^.*(execute|exec|sp_executesql|request|select|insert|union|declare|drop|delete|create|alter|update|order|char|set|cast|convert|meta|script|truncate).* [NC] 
+RewriteRule ^(.*)$ - [F,L]
+
+# Deny Access to wp-config.php, bb-config.php, /wp-admin/install.php, all .htaccess files
+# php.ini, php5.ini and the WordPress readme.html installation file.
+# To allow ONLY yourself access to these files add your current IP address below to the 
+# Allow from line of code and remove the # sign in front of Allow from to uncomment it
+<FilesMatch "^(wp-config\.php|install\.php|\.htaccess|php\.ini|php5\.ini|readme\.html|bb-config\.php)">
+ Deny from all
+# Allow from 88.55.66.200
+</FilesMatch>

@@ -1,0 +1,31 @@
+#   SECURITYPLUGIN 1.2.0 WP-ADMIN SECURE .HTACCESS      
+
+# If you edit the line of code above you will see error messages on the WPSP status page
+# WPSP is reading the version number in the htaccess file to validate checks
+# If you would like to change what is displayed above you
+# will need to edit the WPSP functions.php file to match your changes
+# For more info see the WPSP Guide at AIT-pro.com
+
+# FILTER REQUEST METHODS
+RewriteCond %{REQUEST_METHOD} ^(HEAD|TRACE|DELETE|TRACK) [NC]
+RewriteRule ^(.*)$ - [F,L]
+
+# QUERY STRING EXPLOITS 
+RewriteCond %{QUERY_STRING} \.\.\/ [NC,OR] 
+RewriteCond %{QUERY_STRING} boot\.ini [NC,OR] 
+RewriteCond %{QUERY_STRING} tag\= [NC,OR] 
+RewriteCond %{QUERY_STRING} ftp\:  [NC,OR] 
+RewriteCond %{QUERY_STRING} http\:  [NC,OR] 
+RewriteCond %{QUERY_STRING} https\:  [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*iframe.*(\>|%3E) [NC,OR] 
+RewriteCond %{QUERY_STRING} mosConfig_[a-zA-Z_]{1,21}(=|%3D) [NC,OR]
+RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} ^(.*)cPath=http://(.*)$ [NC,OR] 
+RewriteCond %{QUERY_STRING} ^(.*)/self/(.*)$ [NC,OR]
+RewriteCond %{QUERY_STRING} ^.*(\[|\]|\(|\)|<|>).* [NC,OR] 
+RewriteCond %{QUERY_STRING} ^.*(globals|encode|localhost|loopback).* [NC,OR] 
+RewriteCond %{QUERY_STRING} ^.*(execute|exec|sp_executesql|request|select|insert|union|declare|drop|delete|create|alter|update|order|char|set|cast|convert|meta|script|truncate).* [NC] 
+RewriteRule ^(.*)$ - [F,L]
